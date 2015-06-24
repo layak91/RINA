@@ -79,6 +79,14 @@ void Enrollment::initialize()
                 APNamingInfo(FlowAlloc->getMyAddress().getApn()),
                 EnrollmentStateTableEntry::CON_ESTABLISHED,
                 EnrollmentStateTableEntry::ENROLL_ENROLLED));
+        updateEnrollmentDisplay(ENICON_ENROLLED);
+    }
+    else {
+        //TODO: Work more on checking of N-1 flow existence
+        if (StateTable->isEnrolled(FlowAlloc->getMyAddress().getApn()))
+            { updateEnrollmentDisplay(ENICON_FLOWMIS); }
+        else
+            { updateEnrollmentDisplay(ENICON_NOTENROLLED); }
     }
 
     authType = par(PAR_AUTH_TYPE);
@@ -650,6 +658,7 @@ void Enrollment::signalizeStartOperationResponse(OperationObj* obj) {
 }
 
 void Enrollment::signalizeEnrollmentFinished(EnrollmentStateTableEntry* entry) {
+    updateEnrollmentDisplay(ENICON_ENROLLED);
     APNIPair* apnip = new APNIPair(entry->getLocal(), entry->getRemote());
     emit(sigEnrollmentFinish, apnip);
 }
@@ -700,6 +709,7 @@ void Enrollment::parseConfig(cXMLElement* config) {
 
             if ( !strcmp(n->getTagName(), ELEM_CONNECT) ) {
                 PreenrollConnects[cas]->push_back( APNIPair(n->getAttribute(ATTR_SRC), n->getAttribute(ATTR_DST)) );
+                //EV << "!!!!!!!!!!!!!" << PreenrollConnects[cas]->size() << endl;
             }
             else if ( !strcmp(n->getTagName(), ELEM_RELEASE) ) {
                 PreenrollReleases[cas]->push_back( APNIPair(n->getAttribute(ATTR_SRC), n->getAttribute(ATTR_DST)) );
@@ -708,11 +718,26 @@ void Enrollment::parseConfig(cXMLElement* config) {
     }
 }
 
+void Enrollment::updateEnrollmentDisplay(Enrollment::IconEnrolStatus status) {
+    cModule* ipc = this->getParentModule()->getParentModule();
+    std::string ico, col;
+    switch (status) {
+        case ENICON_ENROLLED: {ico="status/check"; col="green"; break;}
+        case ENICON_FLOWMIS: {ico="status/excl"; col="yellow";break;}
+        case ENICON_NOTENROLLED:
+        default:              {ico="status/cross"; col="red"; break;}
+
+    }
+    ipc->getDisplayString().setTagArg("i2", 0, ico.c_str());
+    ipc->getDisplayString().setTagArg("i2", 1, col.c_str());
+}
+
 void Enrollment::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage()) {
         if ( !opp_strcmp(msg->getName(), MSG_ENRLCON) ) {
             APNIPairs* apnip = PreenrollConnects[simTime()];
+
             while (!apnip->empty())
             {
                 APNIPair pair = apnip->front();

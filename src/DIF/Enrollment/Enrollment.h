@@ -70,6 +70,8 @@ typedef std::map<simtime_t, APNIPairs*> EnrollCommands;
 class Enrollment : public cSimpleModule
 {
   public:
+    enum IconEnrolStatus {ENICON_ENROLLED, ENICON_FLOWMIS, ENICON_NOTENROLLED};
+
     Enrollment();
     virtual ~Enrollment();
     void startCACE(APNIPair* apnip);
@@ -91,6 +93,8 @@ class Enrollment : public cSimpleModule
     void initPointers();
     void initSignalsAndListeners();
     virtual void initialize();
+
+    void updateEnrollmentDisplay(Enrollment::IconEnrolStatus status);
 
     void parseConfig(cXMLElement* config);
 

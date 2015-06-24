@@ -27,10 +27,6 @@ import rina.src.CS.BorderRouter;
 import rina.src.CS.Host1AP;
 import rina.src.CS.InteriorRouterNInt;
 
-
-//
-// TODO Auto-generated network
-//
 network AllNodes
 {
     @display("bgb=527,319");
