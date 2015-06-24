@@ -24,7 +24,7 @@ import rina.src.CS.InteriorRouterNInt;
 
 network UseCase5
 {
-    @display("bgb=527,220,white");
+    
     submodules:
         BorderRouterA: BorderRouter2n1nm {
             @display("p=147,145");
@@ -44,6 +44,6 @@ network UseCase5
     connections:
         HostA.medium <--> DelayChannel {  delay = 1ms; } <--> BorderRouterA.medium[0];
         HostB.medium <--> DelayChannel {  delay = 1ms; } <--> BorderRouterB.medium[0];
-        BorderRouterA.medium[1] <--> DelayChannel {  delay = 1ms; }  <--> InteriorRouter.medium++;
-        BorderRouterB.medium[1] <--> DelayChannel {  delay = 1ms; }  <--> InteriorRouter.medium++;        
+        BorderRouterA.medium[1] <--> DelayChannel {  delay = 1ms; } <--> InteriorRouter.medium++;
+        BorderRouterB.medium[1] <--> DelayChannel {  delay = 1ms; } <--> InteriorRouter.medium++;
 }
