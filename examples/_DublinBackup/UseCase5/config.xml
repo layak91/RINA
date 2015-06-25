@@ -100,13 +100,6 @@
 				</APN>																	
 			</NeighborTable>						
 		</DA>
-		<Enrollment id='ipcProcess2'>
-			<Preenrollment>
-	            <SimTime t="1">
-	                <Connect src="B_LayerAB" dst="Z_LayerAB" />
-	            </SimTime>	            
-			</Preenrollment>
-		</Enrollment>		
 		<Enrollment id='relayIpc'>
 			<Preenrollment>
 	            <SimTime t="2">
