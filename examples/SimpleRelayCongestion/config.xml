@@ -63,7 +63,14 @@
 				</APN>			
 			</NeighborTable>
 			
-		</DA>	
+		</DA>
+		<Enrollment>
+			<Preenrollment>
+	            <SimTime t="5">
+	                <Connect src="22_Layer11" dst="33_Layer11" />
+	            </SimTime>
+			</Preenrollment>
+		</Enrollment>	
 	</Host>
 	<Router id="interiorRouter">
         <IPC id="relayIpc">

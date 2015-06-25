@@ -94,6 +94,13 @@
 				</APN>										
 			</NeighborTable>
 		</DA>	
+		<Enrollment>
+			<Preenrollment>
+	            <SimTime t="5">
+	                <Connect src="B1_LayerX" dst="BRB_LayerX" />
+	            </SimTime>
+			</Preenrollment>
+		</Enrollment>
 	</Host>
 	
 	<Router id="BorderRouterA">
@@ -107,6 +114,13 @@
 				</APN>									
 			</NeighborTable>			
 		</DA>
+		<Enrollment id='ipcProcess2'>
+			<Preenrollment>
+	            <SimTime t="1">
+	                <Connect src="A_LayerAB" dst="Z_LayerAB" />
+	            </SimTime>	            
+			</Preenrollment>
+		</Enrollment>	
 	</Router>
 
 	<Router id="BorderRouterB">
@@ -120,6 +134,13 @@
 				</APN>																	
 			</NeighborTable>						
 		</DA>
+		<Enrollment id='relayIpc'>
+			<Preenrollment>
+	            <SimTime t="2">
+	                <Connect src="BRB_LayerX" dst="BRA_LayerX" />	                
+	            </SimTime>	            
+			</Preenrollment>
+		</Enrollment>	
 	</Router>
 
 	<Router id="InteriorRouter">

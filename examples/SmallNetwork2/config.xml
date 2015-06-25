@@ -106,6 +106,13 @@
 				</APN>			
 			</NeighborTable>
 		</DA>
+		<Enrollment>
+			<Preenrollment>
+	            <SimTime t="1">
+	                <Connect src="104_Layer11" dst="108_Layer11" />
+	            </SimTime>
+			</Preenrollment>
+		</Enrollment>			
 	</Host>
 
 	<Host id="host5">
@@ -190,6 +197,13 @@
 				</APN>
 			</NeighborTable>
 		</DA>	
+		<Enrollment>
+			<Preenrollment>
+	            <SimTime t="0.1">
+	                <Connect src="107_Layer11" dst="106_Layer11" />
+	            </SimTime>
+			</Preenrollment>
+		</Enrollment>
 	</Router>
 	<Router id="router3">
 		<DA>
@@ -202,6 +216,13 @@
 				</APN>	
 			</NeighborTable>
 		</DA>	
+		<Enrollment>
+			<Preenrollment>
+	            <SimTime t="0.5">
+	                <Connect src="108_Layer11" dst="107_Layer11" />
+	            </SimTime>
+			</Preenrollment>
+		</Enrollment>	
 	</Router>	
     
     <Node id="all">
