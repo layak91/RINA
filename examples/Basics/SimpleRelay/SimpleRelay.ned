@@ -20,7 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.SimpleRelay;
+package rina.examples.Basics.SimpleRelay;
+
 import ned.DatarateChannel;
 import rina.src.CS.Host1AP;
 import rina.src.CS.InteriorRouter2Int;

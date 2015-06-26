@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.SingleCS;
+package rina.examples.Basics.SingleCS;
 
 import rina.src.CS.Host2AP;
 
