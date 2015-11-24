@@ -20,39 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.Routing.SimpleMultipath;
-import rina.src.CS.Host1AP;
-import rina.src.CS.HostNAP;
-import rina.src.CS.InteriorRouterNInt;
+package rina.policies.DIF.RMT.PDUForwarding.SimpleMultipathTable;
 
+import rina.policies.DIF.RMT.PDUForwarding.IntPDUForwarding;
 
-network SimpleMultipath
+simple SimpleMultipathTable like IntPDUForwarding
 {
-    @display("bgb=388,718");
-    submodules:
-        host1: Host1AP {
-            @display("p=256,537");
-        }
-        host2: Host1AP {
-            @display("p=67,537");
-        }
-        router1: InteriorRouterNInt {
-            @display("p=256,390");
-        }
-        router2: InteriorRouterNInt {
-            @display("p=67,209");
-        }
-        router3: InteriorRouterNInt {
-            @display("p=256,209");
-        }
-        router4: InteriorRouterNInt {
-            @display("p=67,390");
-        }
-    connections:
-        host1.medium <--> router1.medium++;
-        router1.medium++ <--> router2.medium++;
-        router1.medium++ <--> router3.medium++;
-        host2.medium <--> router4.medium++;
-        router2.medium++ <--> router4.medium++;
-        router3.medium++ <--> router4.medium++;
+    parameters:
+        @class(SimpleMultipathTable::SimpleMultipathTable);
+        @display("i=block/socket");
+        
+        bool printAtEnd = default(false);
 }

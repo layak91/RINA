@@ -20,39 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.Routing.SimpleMultipath;
-import rina.src.CS.Host1AP;
-import rina.src.CS.HostNAP;
-import rina.src.CS.InteriorRouterNInt;
+#ifndef SimpleMultipathTable_H_
+#define SimpleMultipathTable_H_
 
+#include <IntMMForwarding.h>
 
-network SimpleMultipath
-{
-    @display("bgb=388,718");
-    submodules:
-        host1: Host1AP {
-            @display("p=256,537");
-        }
-        host2: Host1AP {
-            @display("p=67,537");
-        }
-        router1: InteriorRouterNInt {
-            @display("p=256,390");
-        }
-        router2: InteriorRouterNInt {
-            @display("p=67,209");
-        }
-        router3: InteriorRouterNInt {
-            @display("p=256,209");
-        }
-        router4: InteriorRouterNInt {
-            @display("p=67,390");
-        }
-    connections:
-        host1.medium <--> router1.medium++;
-        router1.medium++ <--> router2.medium++;
-        router1.medium++ <--> router3.medium++;
-        host2.medium <--> router4.medium++;
-        router2.medium++ <--> router4.medium++;
-        router3.medium++ <--> router4.medium++;
+#include <map>
+#include <string>
+#include <vector>
+
+namespace SimpleMultipathTable {
+
+using namespace std;
+
+typedef map<string, vector<RMTPort*> > FWDTable;
+typedef FWDTable::iterator FWDTableIt;
+
+class SimpleMultipathTable: public IntMMForwarding {
+
+public:
+    // Lookup function, return a list of RMTPorts to forward a PDU/Address+qos.
+    vector<RMTPort * > lookup(const PDU * pdu);
+    vector<RMTPort * > lookup(const Address &dst, const std::string& qos);
+
+    // Returns a representation of the Forwarding Knowledge
+    string toString();
+
+    //Insert/Remove an entry
+    void addReplace(const std::string &addr, vector<RMTPort *> ports);
+
+    void finish();
+
+protected:
+    FWDTable table;
+
+    // Called after initialize
+    void onPolicyInit();
+};
+
 }
+
+#endif /* SimpleMultipathTable_H_ */
