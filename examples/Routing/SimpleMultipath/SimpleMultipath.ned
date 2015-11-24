@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.Routing.LatEx;
+package rina.examples.Routing.SimpleMultipath;
 import rina.src.CS.Host1AP;
 import rina.src.CS.HostNAP;
 import rina.src.CS.InteriorRouterNInt;
 
 
-network LatEx
+network SimpleMultipath
 {
     @display("bgb=388,718");
     submodules:

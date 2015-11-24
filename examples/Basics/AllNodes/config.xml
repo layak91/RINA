@@ -97,7 +97,7 @@
 		<Enrollment>
 			<Preenrollment>
 	            <SimTime t="5">
-	                <Connect src="B1_LayerX" dst="BRB_LayerX" />
+	                <Connect src="h2_NET" dst="r4_NET" />
 	            </SimTime>
 			</Preenrollment>
 		</Enrollment>
