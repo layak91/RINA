@@ -30,10 +30,10 @@ network SimpleMultipath
 {
     @display("bgb=388,718");
     submodules:
-        host1: Host1AP {
+        host1: HostNAP {
             @display("p=256,537");
         }
-        host2: Host1AP {
+        host2: HostNAP {
             @display("p=67,537");
         }
         router1: InteriorRouterNInt {
