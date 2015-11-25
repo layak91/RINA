@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <crc.h>
 
 namespace SimpleMultipathTable {
 
@@ -35,6 +36,17 @@ using namespace std;
 
 typedef map<string, vector<RMTPort*> > FWDTable;
 typedef FWDTable::iterator FWDTableIt;
+
+typedef unsigned short  WORD; // 2byte
+typedef unsigned char  BYTE; // 1byte
+
+typedef struct {
+        std::string qosid;
+        int srccepid;
+        int dstcepid;
+        Address srcaddres;
+        Address dstaddres;
+    } connection_id;
 
 class SimpleMultipathTable: public IntMMForwarding {
 
@@ -56,6 +68,13 @@ protected:
 
     // Called after initialize
     void onPolicyInit();
+
+
+    // CRC calculation
+    //WORD CRC16 (const BYTE *nData, WORD wLength);
+    //const WORD KEYSPACE = 0xFFFF;
+
+
 };
 
 }

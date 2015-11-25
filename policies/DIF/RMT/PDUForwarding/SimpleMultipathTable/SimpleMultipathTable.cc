@@ -31,10 +31,37 @@ using namespace std;
 
 #include <sstream>
 
-// Lookup function, return a list of RMTPorts to forward a PDU/Address+qos.
+// Lookup function based on CRC16
 vector<RMTPort * > SimpleMultipathTable::lookup(const PDU * pdu){
-    return lookup(pdu->getDstAddr(), pdu->getConnId().getQoSId());
+    vector<RMTPort* > ret;
+
+        string dstAddr = pdu->getDstAddr().getIpcAddress().getName();
+
+        if(dstAddr == "") { return ret; }
+
+        FWDTableIt it = table.find(dstAddr);
+
+        if(it != table.end()){
+            connection_id c_id;
+            c_id.dstaddres = pdu->getDstAddr();
+            c_id.dstcepid = pdu->getConnId().getDstCepId();
+            c_id.qosid = pdu->getConnId().getQoSId();
+            c_id.srcaddres = pdu->getSrcAddr();
+            c_id.srccepid = pdu->getConnId().getSrcCepId();
+
+            const WORD KEYSPACE = 0xFFFF;
+
+            WORD hash_key = CRC::CRC16 ((BYTE *) &c_id, (WORD) sizeof(c_id));
+
+            int region_size = KEYSPACE/it->second.size();
+            unsigned short region = hash_key / region_size;
+
+            //int i = intuniform(0, it->second.size()-1);
+            ret.push_back(it->second.at(region));
+        }
 }
+
+//Not Used
 vector<RMTPort * > SimpleMultipathTable::lookup(const Address &dst, const std::string& qos){
 
     vector<RMTPort* > ret;
@@ -59,6 +86,7 @@ vector<RMTPort * > SimpleMultipathTable::lookup(const Address &dst, const std::s
    */
     return ret;
 }
+
 
 // Returns a representation of the Forwarding Knowledge
 string SimpleMultipathTable::toString(){
@@ -96,5 +124,4 @@ void SimpleMultipathTable::finish(){
         EV << "-----------------" << endl;
     }
 }
-
 }
