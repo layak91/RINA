@@ -20,21 +20,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package rina.examples.Routing.SimpleMultipath;
+package rina.examples.Routing.TenNodesSimpleMultipath;
 import rina.src.CS.Host1AP;
 import rina.src.CS.HostNAP;
 import rina.src.CS.InteriorRouterNInt;
 
 
-network SimpleMultipath
+network TenNodesSimpleMultipath
 {
-    @display("bgb=388,432");
+    @display("bgb=648,432");
     submodules:
         host1: HostNAP {
             @display("p=95,370");
         }
         host2: HostNAP {
-            @display("p=253,370");
+            @display("p=570,370");
         }
         router1: InteriorRouterNInt {
             @display("p=95,223");
@@ -48,11 +48,29 @@ network SimpleMultipath
         router4: InteriorRouterNInt {
             @display("p=253,223");
         }
+        router5: InteriorRouterNInt {
+            @display("p=412,223");
+        }
+        router6: InteriorRouterNInt {
+            @display("p=570,42");
+        }
+        router7: InteriorRouterNInt {
+            @display("p=412,42");
+        }
+        router8: InteriorRouterNInt {
+            @display("p=570,223");
+        }
     connections:
         host1.medium <--> router1.medium++;
         router1.medium++ <--> router2.medium++;
         router1.medium++ <--> router3.medium++;
-        host2.medium <--> router4.medium++;
         router2.medium++ <--> router4.medium++;
         router3.medium++ <--> router4.medium++;
+        router7.medium++ <--> router8.medium++;
+        router5.medium++ <--> router6.medium++;
+        router5.medium++ <--> router7.medium++;
+        router6.medium++ <--> router8.medium++;
+        router2.medium++ <--> router5.medium++;
+        router4.medium++ <--> router7.medium++;
+        host2.medium <--> router8.medium++;
 }
