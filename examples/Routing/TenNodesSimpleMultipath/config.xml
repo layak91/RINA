@@ -40,6 +40,7 @@
 		<APN apn="r7_NET">
 			<DIF difName="shim47" ipcAddress="r7" />
 			<DIF difName="shim78" ipcAddress="r7" />
+			<DIF difName="shim57" ipcAddress="r7" />
 		</APN>
 		<APN apn="r8_NET">
 			<DIF difName="shimHR2" ipcAddress="r8" />
