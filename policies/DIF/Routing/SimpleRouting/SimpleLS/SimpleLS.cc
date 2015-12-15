@@ -130,18 +130,18 @@ entries2Next SimpleLS::getAll(){
     return table;
 }
 
-TreeNode SimpleLS::constructTree(linksSt &ls){
+TreeNode SimpleLS::constructTree(linksSt &ls){//Links = Todos los enlaces con una QoS
     TreeNode t(myAddr, 0);
     aMap added;
     added[myAddr] = 0;
 
     wMap waiting;
-    aMap * links = &(ls[myAddr].links);
+    aMap * links = &(ls[myAddr].links);//Los vecinos
     for(linksIt it = links->begin(); it !=links->end(); it++){
         waiting[it->first] = psT(&t, it->second);
     }
 
-    while(!waiting.empty()){
+    while(!waiting.empty()){//Para cada vecino
         unsigned short min = UINT16_MAX;
         addrList mins;
 
