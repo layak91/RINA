@@ -59,6 +59,7 @@ vector<RMTPort * > SimpleMultipathTable::lookup(const PDU * pdu){
             //int i = intuniform(0, it->second.size()-1);
             ret.push_back(it->second.at(region));
         }
+        return ret;
 }
 
 //Not Used
