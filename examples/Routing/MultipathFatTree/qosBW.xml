@@ -10,5 +10,5 @@
 		<QoS id="A1-8" bw="8000" />
 		<QoS id="A1-9" bw="9000" />
 		<QoS id="A1-10" bw="10000" />
-		<QoS id="1" bw="1" />
+		<QoS id="1" bw="8000000" />
 	</QOS_BW>

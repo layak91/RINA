@@ -51,6 +51,43 @@ vector<RMTPort * > QoSMultipathTable_Simple::lookup(const PDU * pdu){
     cEntry * e = &cache[dstAddr][pdu->getConnId().getDstCepId()];
 
     next = e->p;
+
+    //Only for debug
+    int reqBW = QoS_BWreq[pdu->getConnId().getQoSId()];
+    if((pdu->getDstAddr().getIpcAddress().getName()=="R4.S2")
+            && (pdu->getSrcAddr().getIpcAddress().getName()=="R1.S1")
+            && (reqBW == 8000000)){
+
+        vector<entryT> * entries = & table[dstAddr];
+        if(entries->size()==2)
+        {
+            auto port = (*entries)[0].p;
+            cache[dstAddr][11].p=port;
+            cache[dstAddr][11].reqBW=2000000;
+            cache[dstAddr][22].p=port;
+            cache[dstAddr][22].reqBW=2000000;
+            cache[dstAddr][33].p=port;
+            cache[dstAddr][33].reqBW=2000000;
+            cache[dstAddr][44].p=port;
+            cache[dstAddr][44].reqBW=2000000;
+
+            BWControl[port].bw+=8000000;
+
+            port = (*entries)[1].p;
+            cache[dstAddr][55].p=port;
+            cache[dstAddr][55].reqBW=2000000;
+            cache[dstAddr][66].p=port;
+            cache[dstAddr][66].reqBW=2000000;
+            cache[dstAddr][77].p=port;
+            cache[dstAddr][77].reqBW=2000000;
+            cache[dstAddr][88].p=port;
+            cache[dstAddr][88].reqBW=2000000;
+
+            BWControl[port].bw+=8000000;
+        }
+    }
+    //End of debug
+
     if(next == nullptr) {
         next = portLookup(dstAddr, pdu->getConnId().getQoSId());
         e->p = next;//Port inserted in cache
@@ -104,9 +141,9 @@ RMTPort * QoSMultipathTable_Simple::portLookup(const string& dst, const string& 
     vector<entryT> * entries = & table[dst];
 
     long totalBW = 0;
-    for (auto it : *entries)
+    for (entryT & it : *entries)
     {
-       totalBW += BWControl[it.p].bw;
+       totalBW += it.BW-BWControl[it.p].bw;
     }
 
     vector<entryT> possibles;
@@ -149,12 +186,12 @@ RMTPort * QoSMultipathTable_Simple::portLookup(const string& dst, const string& 
 
 RMTPort * QoSMultipathTable_Simple::rerouteFlows(const vector<entryT>& ports, const string& dst, const int& bw){
 
-    vector<entryT> AvBWports; //ports with Aviable BandWith
+    vector<entryT> AvBWports; //ports with AVIABLE BandWith
 
 
     for(auto it : ports)
     {
-        entryT e(it.p,BWControl[it.p].bw);
+        entryT e(it.p,it.BW-BWControl[it.p].bw);
         AvBWports.push_back(e);
     }
 
@@ -164,19 +201,21 @@ RMTPort * QoSMultipathTable_Simple::rerouteFlows(const vector<entryT>& ports, co
         RerouteInfo info(AvBWports);
 
         for(auto it : cache[dst]){
-            if(it.second.p==p.p)
-            {
+            if((it.second.p==p.p) && (it.second.reqBW>0)){
                 //if flow can be rerouted
                 entryT * auxPort = new entryT(NULL, 0);
                 for (auto it2 : info.ports){
-                    if ((it2.second > it.second.reqBW) && (it2.second > auxPort->BW)){
-                        auxPort->p = it2.first;
-                        auxPort->BW = it2.second;
+                    if (it2.first != p.p){
+                        if ((it2.second >= it.second.reqBW) && (it2.second > auxPort->BW)){
+                            auxPort->p = it2.first;
+                            auxPort->BW = it2.second;
+                        }
                     }
                 }
                 info.addMov(p.p, auxPort->p, it.first, it.second.reqBW);
                 info.ports[p.p]+=it.second.reqBW;
                 info.ports[auxPort->p]-=it.second.reqBW;
+                delete auxPort;
 
                 if(info.ports[p.p] >= bw){
                     AplyReroute(info, dst);
