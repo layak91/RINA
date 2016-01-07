@@ -84,6 +84,15 @@ vector<RMTPort * > QoSMultipathTable_Simple::lookup(const PDU * pdu){
             cache[dstAddr][88].reqBW=2000000;
 
             BWControl[port].bw+=8000000;
+
+            std::ostringstream os;
+            EV << "Cache Inicial" << endl;
+            for(auto it : cache[dstAddr]){
+                EV << "Flujo : " << it.first << endl;
+                EV << "Puerto: " << (int)it.second.p << endl;
+                EV << "BW    : " << it.second.reqBW << endl <<endl;
+            }
+            EV << endl << endl;
         }
     }
     //End of debug
@@ -96,10 +105,16 @@ vector<RMTPort * > QoSMultipathTable_Simple::lookup(const PDU * pdu){
         BWControl[next].bw += QoS_BWreq[pdu->getConnId().getQoSId()];
     }
 
-    else//just for debug
-    {
-
+    //Only for debug
+    EV << "Cache Final" << endl;
+    for(auto it : cache[dstAddr]){
+        EV << "Flujo : " << it.first << endl;
+        EV << "Puerto: " << (int)it.second.p << endl;
+        EV << "BW    : " << it.second.reqBW << endl <<endl;
     }
+    EV << endl << endl;
+    //End of debug
+
     vector<RMTPort *> ret;
     if(next != nullptr) {
         ret.push_back(next);
