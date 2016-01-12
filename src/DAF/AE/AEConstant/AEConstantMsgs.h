@@ -20,17 +20,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+#ifndef __RINA_AEConstantMsg_H_
+#define __RINA_AEConstantMsg_H_
 
+//Standard libraries
 #include <omnetpp.h>
+//RINASim libraries
+#include "AE.h"
 
-#include "AddressComparatorBase.h"
+class PingMsg : public CDAP_M_Read {
+public:
+    PingMsg(bool _counted);
+    simtime_t pingAt;
+    bool counted;
+};
 
-class ExactMatch : public AddressComparatorBase
-{
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
+class PongMsg : public CDAP_M_Read_R {
+public:
+    PongMsg(simtime_t _pingAt, bool _counted);
+    simtime_t pingAt, pongAt;
+    bool counted;
+};
+
+class StartMsg : public CDAP_M_Read {
+public:
+    StartMsg();
+};
+
+
+class SignalMsg : public cObject {
+    public:
+    std::string qos;
+    simtime_t delay, rtt;
+    char type;
+
+    SignalMsg(std::string _qos);
+    SignalMsg(std::string _qos, simtime_t _delay);
+    SignalMsg(std::string _qos, simtime_t _delay, simtime_t _rtt);
 };
 
 #endif

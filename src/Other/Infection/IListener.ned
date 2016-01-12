@@ -20,17 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+package rina.src.Other.Infection;
 
-#include <omnetpp.h>
-
-#include "AddressComparatorBase.h"
-
-class ExactMatch : public AddressComparatorBase
-{
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
-
-#endif
+simple IListener {
+    parameters:
+        @class(IListener::IListener);
+        @display("i=device/antennatower");
+        
+        string configname = default("");
+        string runname = default("");
+        
+        xml data = default(xml("<QoS><QoS/>"));
+        
+        int mtu = default(1500);
+}

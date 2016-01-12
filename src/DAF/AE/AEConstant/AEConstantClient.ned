@@ -20,17 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+package rina.src.DAF.AE.AEConstant;
 
-#include <omnetpp.h>
+import rina.src.DAF.AE.AE;
+import rina.src.DAF.AE.IAE;
 
-#include "AddressComparatorBase.h"
-
-class ExactMatch : public AddressComparatorBase
+simple AEConstantClient extends AE like IAE
 {
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
-
-#endif
+    parameters:
+        @class(AEConstantClient);
+        string dstApName = default("AppErr");
+        string dstApInstance = default("0");
+        string dstAeName = default("AeErr");
+        string dstAeInstance = default("0");
+        
+        int startAt  = default(0);
+        
+        bool printAtEnd = default(false);
+        bool recTimes = default(false);
+        
+}

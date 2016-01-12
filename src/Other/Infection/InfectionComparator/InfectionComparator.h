@@ -19,18 +19,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+#pragma once
 
 #include <omnetpp.h>
 
 #include "AddressComparatorBase.h"
 
-class ExactMatch : public AddressComparatorBase
+class InfectionComparator : public AddressComparatorBase
 {
+  private :
+    simsignal_t signal;
+
   public:
     virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
 
-#endif
+    void onPolicyInit();
+};

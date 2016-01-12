@@ -499,7 +499,7 @@ void RMT::processMessage(cMessage* msg)
 
         if (dynamic_cast<RMTQueue*>(senderModule) != nullptr)
         { // message from a port
-            if (addrComparator->matchesThisIPC(pdu->getDstAddr()))
+            if (addrComparator->matchesThisIPC(pdu->getDstAddr(), pdu))
             {
                 relayPDUToEFCPI(pdu);
             }
@@ -514,7 +514,7 @@ void RMT::processMessage(cMessage* msg)
         }
         else
         { // message from an EFCPI
-            if (addrComparator->matchesThisIPC(pdu->getDstAddr()))
+            if (addrComparator->matchesThisIPC(pdu->getDstAddr(), pdu))
             {
                 relayPDUToEFCPI(pdu);
             }

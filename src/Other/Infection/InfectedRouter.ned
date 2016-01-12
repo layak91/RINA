@@ -20,17 +20,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
 
-#include <omnetpp.h>
+package rina.src.Other.Infection;
 
-#include "AddressComparatorBase.h"
+import rina.src.DAF.AE.AEVideo.AEVideo;
+import rina.src.DAF.DA.DIFAllocator;
+import rina.src.DIF.IPCProcess;
 
-class ExactMatch : public AddressComparatorBase
+module InfectedRouter
 {
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
+    parameters:
+        @display("i=abstract/switch;bgb=391,325");
+        @node;
 
-#endif
+    gates:
+        inout medium[];
+
+    submodules:
+        ipcProcess[sizeof(medium)]: IPCProcess {
+            @display("p=104,245,r,150");
+        }
+        relayIpc: IPCProcess {
+            @display("p=104,141;i=,#FFB000");
+            relay = true;
+        }
+        difAllocator: DIFAllocator {
+            @display("p=104,53");
+        }
+        infection: Infection {
+            @display("p=260,245");
+            infectedIPC = default("relayIpc");
+        }
+    connections allowunconnected:
+
+        // Every IPC Process is connected to its medium and the Relay IPC.
+        for i=0..sizeof(medium)-1 {
+            relayIpc.southIo++ <--> ipcProcess[i].northIo++;
+            ipcProcess[i].southIo++ <--> medium[i];
+        }
+}

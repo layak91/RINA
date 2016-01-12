@@ -20,17 +20,58 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+#ifndef __RINA_AEConstantClient_H_
+#define __RINA_AEConstantClient_H_
 
+//Standard libraries
 #include <omnetpp.h>
+//RINASim libraries
+#include "AE.h"
 
-#include "AddressComparatorBase.h"
+#include "AEConstantMsgs.h"
 
-class ExactMatch : public AddressComparatorBase
-{
+#include <map>
+
+class AEConstantClient : public AE {
   public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
+    AEConstantClient();
+    virtual ~AEConstantClient();
+
+  protected:
+    virtual void initialize();
+    virtual void finish();
+    virtual void handleMessage(cMessage *msg);
+
+    void handleSelfMessage(cMessage* msg);
+
+  private:
+    std::string myPath;
+
+    std::string dstApName;
+    std::string dstApInstance;
+    std::string dstAeName;
+    std::string dstAeInstance;
+/*
+    bool printAtEnd, recTimes;
+*/
+    simsignal_t signal;
+/*
+    long send, rcv, sendSize, rcvSize;
+
+
+    simtime_t minDelay;
+    simtime_t maxDelay;
+    simtime_t firstR;
+    simtime_t lastR;
+    std::map<double, int> times;
+    double dround(double a, int ndigits);
+*/
+    virtual void processMRead(CDAPMessage* msg);
+    virtual void processMReadR(CDAPMessage* msg);
+
+
+
 };
+
 
 #endif

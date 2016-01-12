@@ -20,17 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+#include "InfectionComparator.h"
+#include "InfectionSignals.h"
 
-#include <omnetpp.h>
 
-#include "AddressComparatorBase.h"
+Define_Module(InfectionComparator);
 
-class ExactMatch : public AddressComparatorBase
+void InfectionComparator::onPolicyInit() {
+    signal = registerSignal("InfectionSignal");
+}
+
+bool InfectionComparator::matchesThisIPC(const Address& addr, PDU * pdu)
 {
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
+    if(addr == thisIPCAddr) {
+        if(InfectedDataTransferPDU *inf = dynamic_cast<InfectedDataTransferPDU * >(pdu)){
+            if(inf->signaled) {
+                ConnectionId cId = inf->getConnId();
+                simtime_t delay = simTime() - inf->sendT;
+                emit(signal, new RecvInfMsg(
+                        inf->getSrcAddr().getIpcAddress().getName(),
+                        inf->getDstAddr().getIpcAddress().getName(),
+                        inf->getConnId().getSrcCepId(),
+                        cId.getQoSId(),
+                        inf->getSeqNum(),
+                        delay,
+                        inf->pathDelay,
+                        inf->pstDelay));
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
 
-#endif
+

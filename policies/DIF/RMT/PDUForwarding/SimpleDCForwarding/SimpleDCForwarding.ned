@@ -20,17 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+package rina.policies.DIF.RMT.PDUForwarding.SimpleDCForwarding;
 
-#include <omnetpp.h>
+import rina.policies.DIF.RMT.PDUForwarding.IntPDUForwarding;
 
-#include "AddressComparatorBase.h"
-
-class ExactMatch : public AddressComparatorBase
+simple SimpleDCForwarding like IntPDUForwarding
 {
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
-
-#endif
+    parameters:
+        @class(NSPSimpleDC::SimpleDCForwarding);
+        @display("i=block/socket");
+        
+        bool printAtEnd = default(false);
+}

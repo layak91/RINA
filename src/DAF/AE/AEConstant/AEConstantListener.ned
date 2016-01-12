@@ -20,17 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef __EXACTMATCH_H_
-#define __EXACTMATCH_H_
+package rina.src.DAF.AE.AEConstant;
 
-#include <omnetpp.h>
-
-#include "AddressComparatorBase.h"
-
-class ExactMatch : public AddressComparatorBase
-{
-  public:
-    virtual bool matchesThisIPC(const Address& addr, PDU * pdu);
-};
-
-#endif
+simple AEConstantListener {
+    parameters:
+        @class(AEConstantListener);
+        @display("i=device/antennatower");
+        
+        string configname = default("");
+        string runname = default("");
+}
