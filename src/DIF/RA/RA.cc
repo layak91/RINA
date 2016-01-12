@@ -825,3 +825,32 @@ NM1FlowTable* RA::getFlowTable()
 bool RA::hasFlow(std::string addr, std::string qosId) {
     return rmt->isOnWire() ? true : (flowTable->findFlowByDstApni(addr, qosId) != nullptr);
 }
+
+bool RA::sleepFlow(Flow * flow, simtime_t wakeUp) {
+    Enter_Method_Silent();
+    if(flowTable->lookup(flow) != nullptr) {
+        simtime_t now = simTime();
+        if(wakeUp >= now) {
+            Flow *nflow = new Flow(flow->getSrcApni(), flow->getDstApni());
+            nflow->setQosRequirements(flow->getQosReqs());
+
+            if (preparedFlows[wakeUp] == nullptr) {
+                preparedFlows[wakeUp] = new std::list<Flow*>;
+                cMessage* msg = new cMessage("RA-CreateConnections");
+                scheduleAt(wakeUp, msg);
+            }
+            preparedFlows[wakeUp]->push_back(nflow);
+        }
+
+        if (preDeallocs[now] == nullptr)
+        {
+            preDeallocs[now] = new std::list<Flow*>;
+            cMessage* msg = new cMessage("RA-TerminateConnections");
+            scheduleAt(now, msg);
+        }
+        preDeallocs[now]->push_back(flow);
+
+        return true;
+    }
+    return false;
+}

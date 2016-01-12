@@ -71,6 +71,8 @@ class RA : public RABase
     virtual NM1FlowTable* getFlowTable();
     virtual bool hasFlow(std::string addr, std::string qosId);
 
+    virtual bool sleepFlow(Flow * flow, simtime_t wakeUp);
+
     // event hook handlers
     virtual void postNFlowAllocation(Flow* flow);
     virtual void postNM1FlowAllocation(NM1FlowTableItem* ftItem);
@@ -95,6 +97,7 @@ class RA : public RABase
 
     std::string processName;
     std::map<simtime_t, std::list<Flow*>*> preparedFlows;
+    std::map<simtime_t, std::list<Flow*>*> preDeallocs;
     std::map<std::string, std::list<Flow*>*> pendingFlows;
     QoSReq mgmtReqs;
 
